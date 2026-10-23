@@ -42,3 +42,10 @@ A delimiter at the very start or end of the string produces an empty leading or 
 segment, and adjacent delimiters produce empty segments between them. This is deliberate:
 it keeps `segment.text + delimiter.matched_text` reconstruction lossless. If you want to
 drop empty segments, filter `result.text_segments` yourself — the library does not guess.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
